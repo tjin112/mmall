@@ -1,5 +1,6 @@
 require("./index.css");
 var _mm = require("util/mm.js");
+var templageIndex = require("./index.string");
 // 侧边导航
 var navSide = {
   option: {
@@ -11,9 +12,9 @@ var navSide = {
       { name: "about", desc: "关于MMall", href: "./about.html" }
     ]
   },
-  init: function() {
+  init: function(option) {
     //   合并选项
-    $.extend(this.option, this.option);
+    $.extend(this.option, option);
     this.renderNav();
   },
   //   渲染导航菜单
@@ -26,6 +27,11 @@ var navSide = {
       }
     }
     // 渲染List数据
-    var navHtml = _mm.renderHtml()
+    var navHtml = _mm.renderHtml(templageIndex, {
+      navList: this.option.navList
+    });
+    // 把html放入容器
+    $('.nav-side').html(navHtml)
   }
 };
+module.exports = navSide;

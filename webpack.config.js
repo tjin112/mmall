@@ -10,11 +10,12 @@ var HtmlWebpackPlugin = require("html-webpack-plugin");
 //环境变量配置，dev/online（开发环境以及线上环境）
 var WEBPACK_ENV = process.env.WEBPACK_ENV || "dev";
 //获取html-webpack-plugin 参数的方法
-var getHtmlConfig = function(name) {
+var getHtmlConfig = function(name,title) {
   return {
     template: "./src/view/" + name + ".html",
     // filename的路径还是根据 output中的path为路径
     filename: "view/" + name + ".html",
+    title:title,
     inject: true,
     hash: true,
     chunks: ["common", name]
@@ -25,7 +26,8 @@ var config = {
   entry: {
     common: ["./src/page/common/index.js"],
     index: ["./src/page/index/index.js"],
-    login: ["./src/page/login/index.js"]
+    login: ["./src/page/login/index.js"],
+    result: ["./src/page/result/index.js"]
   },
   //定义出口文件地址
   output: {
@@ -52,20 +54,24 @@ var config = {
         //使用url 需要安装 npm install url-loader file-loader --save-dev
         test: /\.(gif|png|jpg|woff|svg|eot|ttf)\??.*$/,
         use: ["url-loader?limit=100&name=resource/[name].[ext]"]
+      },
+      {
+        test: /\.string$/,
+        use: ["html-loader"]
       }
     ]
   },
   optimization: {
     //独立通用模块到js/common.js
     splitChunks: {
-      chunks: "initial",
+      // chunks: "initial",
       //   default: false,
       cacheGroups: {
         default: false, //禁用cacheGroups 默认属性
         // commons  自定义属性
         commons: {
           name: "common",
-          chunks: "initial",
+          chunks: "all",
           minChunks: 2, //如果一个js被使用两次，进行打包
           minSize: 0
         }
@@ -76,9 +82,9 @@ var config = {
   resolve: {
     alias: {
       util: __dirname + "/src/util",
-      page:__dirname + '/src/page',
-      service:__dirname + '/src/service',
-      image:__dirname + '/src/image',
+      page: __dirname + "/src/page",
+      service: __dirname + "/src/service",
+      image: __dirname + "/src/image",
       node_modules: __dirname + "/node_modules"
     }
   },
@@ -87,11 +93,11 @@ var config = {
     // new ExtractTextPlugin("css/[name].css"),
     new ExtractTextWebpackPlugin("css/[name].css"),
     // new ExtractTextPlugin("css/[name].css"),
-    new HtmlWebpackPlugin(getHtmlConfig("index")),
-    new HtmlWebpackPlugin(getHtmlConfig("login"))
+    new HtmlWebpackPlugin(getHtmlConfig("index",'首页')),
+    new HtmlWebpackPlugin(getHtmlConfig("login",'用户登录')),
+    new HtmlWebpackPlugin(getHtmlConfig("result",'操作结果'))
   ],
   mode: "development" // 设置mode
-  
 };
 // if ("dev" === WEBPACK_ENV) {
 //   config.entry.common.push("webpack-dev-server/client?http://localhost:8088/");
