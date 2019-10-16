@@ -10,12 +10,12 @@ var HtmlWebpackPlugin = require("html-webpack-plugin");
 //环境变量配置，dev/online（开发环境以及线上环境）
 var WEBPACK_ENV = process.env.WEBPACK_ENV || "dev";
 //获取html-webpack-plugin 参数的方法
-var getHtmlConfig = function(name,title) {
+var getHtmlConfig = function(name, title) {
   return {
     template: "./src/view/" + name + ".html",
     // filename的路径还是根据 output中的path为路径
     filename: "view/" + name + ".html",
-    title:title,
+    title: title,
     inject: true,
     hash: true,
     chunks: ["common", name]
@@ -26,7 +26,12 @@ var config = {
   entry: {
     common: ["./src/page/common/index.js"],
     index: ["./src/page/index/index.js"],
-    login: ["./src/page/login/index.js"],
+    "user-login": ["./src/page/user-login/index.js"],
+    "user-register": ["./src/page/user-register/index.js"],
+    "user-pass-reset": ["./src/page/user-pass-reset/index.js"],
+    "user-center": ["./src/page/user-center/index.js"],
+    "user-center-update": ["./src/page/user-center-update/index.js"],
+    "user-pass-update": ["./src/page/user-pass-update/index.js"],
     result: ["./src/page/result/index.js"]
   },
   //定义出口文件地址
@@ -93,11 +98,26 @@ var config = {
     // new ExtractTextPlugin("css/[name].css"),
     new ExtractTextWebpackPlugin("css/[name].css"),
     // new ExtractTextPlugin("css/[name].css"),
-    new HtmlWebpackPlugin(getHtmlConfig("index",'首页')),
-    new HtmlWebpackPlugin(getHtmlConfig("login",'用户登录')),
-    new HtmlWebpackPlugin(getHtmlConfig("result",'操作结果'))
+    new HtmlWebpackPlugin(getHtmlConfig("index", "首页")),
+    new HtmlWebpackPlugin(getHtmlConfig("user-login", "用户登录")),
+    new HtmlWebpackPlugin(getHtmlConfig("user-register", "用户注册")),
+    new HtmlWebpackPlugin(getHtmlConfig("result", "操作结果")),
+    new HtmlWebpackPlugin(getHtmlConfig("user-pass-reset", "找回密码")),
+    new HtmlWebpackPlugin(getHtmlConfig("user-pass-update", "修改密码")),
+    new HtmlWebpackPlugin(getHtmlConfig("user-center", "个人中心")),
+    new HtmlWebpackPlugin(getHtmlConfig("user-center-update", "修改个人信息"))
   ],
-  mode: "development" // 设置mode
+  mode: "development", // 设置mode
+  devServer: {
+    port: 8080,
+    inline: true,
+    proxy: {
+      "**/*.do": {
+        target: "http://test.happymmall.com",
+        changeOrigin: true
+      }
+    }
+  }
 };
 // if ("dev" === WEBPACK_ENV) {
 //   config.entry.common.push("webpack-dev-server/client?http://localhost:8088/");

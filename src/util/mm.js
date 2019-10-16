@@ -2,7 +2,7 @@
 var Hogan = require("hogan.js");
 var conf = {
   serverHost: ""
-};
+}; 
 var _mm = {
   // 网络请求
   request: function(param) {
@@ -61,12 +61,10 @@ var _mm = {
     var value = $.trim(value);
     // 非空验证
     if ("require" === type) {
-      //将value 转成布尔值  value 为true
       return !!value;
     }
     // 手机号验证
     if ("phone" === type) {
-      //以数字1 开头 十位数字
       return /^1\d{10}$/.test(value);
     }
     // 邮箱格式验证
