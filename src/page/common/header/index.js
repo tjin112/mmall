@@ -5,6 +5,7 @@ var header = {
   //暴漏一个初始化的function
   init: function() {
     this.bindEvent();
+    this.onLoad();
   },
   onLoad: function() {
     var keyword = _mm.getUrlParam("keyword");
@@ -20,20 +21,20 @@ var header = {
       _this.searchSubmit();
     });
     // 输入回车后 做搜索提交
-    $("#search-input").keyup(function(e){
+    $("#search-input").keyup(function(e) {
       // keycode 13 为回车
-      if(e.keyCode ===13){
+      if (e.keyCode === 13) {
         _this.searchSubmit();
       }
-    })
+    });
   },
   // 搜索提交
   searchSubmit: function() {
     var keyword = $.trim($("#search-input").val());
-  // 如果提交的时候有keyword  跳转到list页面
-    if(keyword){
-      window.location.href = './list.html?keyword=' + keyword;
-    }else{
+    // 如果提交的时候有keyword  跳转到list页面
+    if (keyword) {
+      window.location.href = "./list.html?keyword=" + keyword;
+    } else {
       // 如果keyword 为空 跳转到首页
       _mm.goHome();
     }

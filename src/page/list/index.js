@@ -1,0 +1,116 @@
+var _mm = require("../../util/mm");
+require("page/common/header/index.js");
+require("page/common/nav/index.js");
+require("./index.css");
+var templateIndex = require("./index.string");
+var _product = require("service/product-service.js");
+var templateIndex = require("./index.string");
+var Pagination = require("util/pagination/index.js");
+var page = {
+  data: {
+    listParam: {
+      keyword: _mm.getUrlParam("keyword") || "",
+      categoryId: _mm.getUrlParam("categoryId") || "",
+      orderBy: _mm.getUrlParam("orderBy") || "default",
+      pageNum: _mm.getUrlParam("pageNum") || 1,
+      pageSize: _mm.getUrlParam("pageSize") || 15
+    }
+  },
+  init: function() {
+    this.onLoad();
+    this.bindEvent();
+  },
+  onLoad: function() {
+    this.loadList();
+  },
+  bindEvent: function() {
+    var _this = this;
+    //   排序点击事件
+    $(".sort-item").click(function() {
+      var $this = $(this);
+      _this.data.listParam.pageNum = 1;
+      //   点击默认排序
+      if ($this.data("type") === "default") {
+        //   如果已经是active 样式
+        if ($this.hasClass("active")) {
+          return;
+        }
+        //   如果没有active样式
+        else {
+          $this
+            .addClass("active")
+            .siblings(".sort-item")
+            .removeClass("active ascdesc");
+          _this.data.listParam.orderBy = "default";
+        }
+      }
+      //   点击价格排序
+      else if ($this.data("type") === "price") {
+        //   active class 的处理
+        $this
+          .addClass("active")
+          .siblings(".sort-item")
+          .removeClass("active asc desc");
+        if (!$this.hasClass("asc")) {
+          $this.addClass("asc").removeClass("desc");
+          _this.data.listParam.orderBy = "price_asc";
+        } else {
+          $this.addClass("desc").removeClass("asc");
+          _this.data.listParam.orderBy = "price_desc";
+        }
+      }
+      // 重新加载列表
+      _this.loadList();
+    });
+  },
+  // 加载List数据
+  loadList: function() {
+    var listParam = this.data.listParam;
+    var listHtml = "";
+    var _this = this;
+    var $pListCon = $(".p-list-con");
+    $pListCon.html('<div class="loading"></div>');
+    // 删除参数中没有必要的字段
+    listParam.categoryId
+      ? delete listParam.keyword
+      : delete listParam.categoryId;
+    //   请i去接口
+    _product.getProductList(
+      listParam,
+      function(res) {
+        listHtml = _mm.renderHtml(templateIndex, {
+          list: res.list
+        });
+        $pListCon.html(listHtml);
+        _this.loadPagination({
+          hasPreviousPage: res.hasPreviousPage,
+          prePage: res.prePage,
+          hasNextPage: res.hasNextPage,
+          nextPage: res.nextPage,
+          pageNum: res.pageNum,
+          pages: res.pages
+        });
+      },
+      function(errMsg) {
+        _mm.errorTips(errMsg);
+      }
+    );
+  },
+  // 加载分页信息
+  loadPagination: function(pageInfo) {
+    var _this = this;
+    this.Pagination ? "" : (this.Pagination = new Pagination());
+    this.Pagination.render(
+      $.extend({}, pageInfo, {
+        container: $(".pagination"),
+        onSelectPage: function(pageNum) {
+          _this.data.listParam.pageNum = pageNum;
+          _this.loadList();
+        }
+      })
+    );
+  }
+};
+$(function() {
+  page.init();
+});
