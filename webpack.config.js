@@ -15,6 +15,7 @@ var getHtmlConfig = function(name, title) {
     template: "./src/view/" + name + ".html",
     // filename的路径还是根据 output中的path为路径
     filename: "view/" + name + ".html",
+    favicon:'./favicon.ico',
     title: title,
     inject: true,
     hash: true,
@@ -115,7 +116,7 @@ var config = {
   ],
   mode: "development", // 设置mode
   devServer: {
-    port: 8080,
+    port: 8088,
     inline: true,
     proxy: {
       "**/*.do": {
