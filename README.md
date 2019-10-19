@@ -11,4 +11,4 @@ happymmall
 
 1. npm install
 2. windows:npm run dev_win
-3. mac:npm run dev
+3. mac:npm run dev 
