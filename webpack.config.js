@@ -42,7 +42,7 @@ var config = {
   output: {
     path: path.resolve(__dirname, "dist"),
     publicPath:
-      "dev" === WEBPACK_ENV ? "/dist/" : "//s.happymmall.com/mmall-fe/dist/",
+      "dev" === WEBPACK_ENV ? "/dist/" : "/dist/",
     filename: "js/[name].js"
   },
   //引用jq全局
