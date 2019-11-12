@@ -12,3 +12,5 @@ happymmall
 1. npm install
 2. windows:npm run dev_win
 3. mac:npm run dev 
+
+####https://newmmall.appspot.com/dist/view/index.html
