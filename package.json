@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "ejs": "^2.7.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "font-awesome": "^4.7.0",
     "hogan.js": "^3.0.2",
     "html-loader": "^0.5.5",
